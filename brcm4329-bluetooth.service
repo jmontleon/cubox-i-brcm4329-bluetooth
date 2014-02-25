@@ -1,0 +1,17 @@
+[Unit]
+Description=Broadcom Bluetooth bcm4329
+After=syslog.target
+Before=bluetooth.service
+
+[Service]
+Type=simple
+ExecStartPre=/sbin/brcm_patchram_plus\
+ --timeout=6.0\
+ --patchram /lib/firmware/brcm/bcm4329.hcd\
+ --baudrate 921600\
+ --use_baudrate_for_download\
+ /dev/ttymxc3
+ExecStart=/sbin/hciattach -n /dev/ttymxc3 any 921600
+
+[Install]
+WantedBy=multi-user.target
